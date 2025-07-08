@@ -1,7 +1,7 @@
 package br.sp.gov.itu.fatec.backend.entities;
 
 import java.io.Serializable;
-import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -9,10 +9,14 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @Entity
+@EqualsAndHashCode(of = "id")
 @Table(name = "TBL_EMAILS")
 public class Email implements Serializable {
   @Id
@@ -22,25 +26,6 @@ public class Email implements Serializable {
   private String label;
   @ManyToOne
   @JoinColumn(name = "contact_id")
+  @JsonBackReference
   private Contact contact;
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(id);
-  }
-
-  @Override
-  public boolean equals(Object obj) {
-    if (this == obj) {
-      return true;
-    }
-    if (obj == null) {
-      return false;
-    }
-    if (getClass() != obj.getClass()) {
-      return false;
-    }
-    Email other = (Email) obj;
-    return Objects.equals(id, other.id);
-  }
 }

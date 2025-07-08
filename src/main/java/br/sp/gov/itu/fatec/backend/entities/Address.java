@@ -1,17 +1,21 @@
 package br.sp.gov.itu.fatec.backend.entities;
 
 import java.io.Serializable;
-import java.util.Objects;
+import java.util.List;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
+@EqualsAndHashCode(of = "id")
 @Entity
 @Table(name = "TBL_ADDRESSES")
 public class Address implements Serializable {
@@ -26,27 +30,7 @@ public class Address implements Serializable {
   private String state;
   private String country;
   private String zipCode;
-  @ManyToOne
-  @JoinColumn(name = "contact_id")
-  private Contact contact;
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(id);
-  }
-
-  @Override
-  public boolean equals(Object obj) {
-    if (this == obj) {
-      return true;
-    }
-    if (obj == null) {
-      return false;
-    }
-    if (getClass() != obj.getClass()) {
-      return false;
-    }
-    Address other = (Address) obj;
-    return Objects.equals(id, other.id);
-  }
+  @ManyToMany(mappedBy = "addresses")
+  @JsonBackReference
+  private List<Contact> contacts;
 }
